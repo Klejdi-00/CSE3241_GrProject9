@@ -12,6 +12,19 @@ if(isset($_POST['btnaddgarage'])){
     $address = trim($_POST['address']);
     $max_spaces = $_POST['max_spaces'];
 
+    if($check_inputs){
+        // Check if name already exists
+        $stmt = $connect->prepare("select * from garage where name = ?");
+        $stmt->bind_param("s", $garage_name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        if($result->num_rows > 0){
+          $check_inputs = false;
+          $error = "There exists a garage with the same name.";
+        }
+      }
+
      if($check_inputs){
        // Check if address already exists
        $stmt = $connect->prepare("select * from garage where address = ?");
@@ -80,11 +93,11 @@ if(isset($_POST['btnaddgarage'])){
             </div>
             <div class="form-group">
               <label for="address">Address:</label>
-              <input style="text-align:center" required type="text" class="form-control" name="address" id="address">
+              <input style="text-align:center" required type="text" class="form-control" name="address" id="address" maxlength="255">
             </div>
             <div class="form-group">
               <label for="max_spaces">Total Number of Spaces:</label>
-              <input style="text-align:center" required type="number" class="form-control" name="max_spaces" id="max_spaces">
+              <input style="text-align:center" required type="number" class="form-control" name="max_spaces" id="max_spaces" max=1000000 min=0>
             </div>
             <button type="submit" name="btnaddgarage" class="btn btn-default">Submit</button>
           </form>
