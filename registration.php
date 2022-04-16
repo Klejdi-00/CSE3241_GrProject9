@@ -40,7 +40,6 @@ if(isset($_POST['btnsignup'])){
    }
 
    if($check_inputs){
-
      // Check if username already exists
      $stmt = $connect->prepare("SELECT * FROM users WHERE username = ?");
      $stmt->bind_param("s", $username);
@@ -51,8 +50,21 @@ if(isset($_POST['btnsignup'])){
        $check_inputs = false;
        $error = "Username is taken.";
      }
-
    }
+
+   if($check_inputs){
+    // Check if phone # already exists
+    $stmt = $connect->prepare("SELECT * FROM users WHERE phone_nr = ?");
+    $stmt->bind_param("i", $phone_nr);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    if($result->num_rows > 0){
+      $check_inputs = false;
+      $error = "Phone number is already in use.";
+    }
+
+  }
 
    // Insert records
    if($check_inputs){
