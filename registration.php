@@ -107,27 +107,27 @@ if(isset($_POST['btnsignup'])){
 
             <div class="form-group">
               <label for="fname">First Name:</label>
-              <input type="text" class="form-control" name="fname" id="fname" maxlength="80">
+              <input style="text-align:center" type="text" class="form-control" name="fname" id="fname" maxlength="80">
             </div>
             <div class="form-group">
               <label for="lname">Last Name:</label>
-              <input type="text" class="form-control" name="lname" id="lname" maxlength="80">
+              <input style="text-align:center" type="text" class="form-control" name="lname" id="lname" maxlength="80">
             </div>
             <div class="form-group">
               <label for="username">Username:</label>
-              <input type="username" class="form-control" name="username" id="username" maxlength="80">
+              <input style="text-align:center" type="username" class="form-control" name="username" id="username" maxlength="80">
             </div>
             <div class="form-group">
               <label for="phone_nr">Phone # (ex. 1234567890):</label>
-              <input type="phone_nr" class="form-control" name="phone_nr" id="phone_nr" maxlength="10">
+              <input style="text-align:center" type="phone_nr" class="form-control" name="phone_nr" id="phone_nr" maxlength="10">
             </div>
             <div class="form-group">
               <label for="password">Password:</label>
-              <input type="password" class="form-control" name="password" id="password" maxlength="80">
+              <input style="text-align:center" type="password" class="form-control" name="password" id="password" maxlength="80">
             </div>
             <div class="form-group">
               <label for="pwd">Confirm Password:</label>
-              <input type="password" class="form-control" name="confirmpassword" id="confirmpassword" onkeyup='' maxlength="80">
+              <input style="text-align:center" type="password" class="form-control" name="confirmpassword" id="confirmpassword" onkeyup='' maxlength="80">
             </div>
 
             <button type="submit" name="btnsignup" class="btn btn-default">Submit</button>

@@ -68,7 +68,7 @@ if(isset($_POST['btnaddvenue'])){
     <br>
     <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
           <form method='post' action=''>
-            <h2 style="padding-top:25px">Add a Venue</h2>
+            <h2 style="padding-top:25px">Add Venue</h2>
             <br>
             <?php 
             // Display Error message
@@ -96,7 +96,7 @@ if(isset($_POST['btnaddvenue'])){
 
             <div class="form-group">
               <label for="venue_name">Venue Name:</label>
-              <input required type="text" class="form-control" name="venue_name" id="venue_name" maxlength="80">
+              <input style="text-align:center" style="text-align:center" required type="text" class="form-control" name="venue_name" id="venue_name" maxlength="80">
             </div>
             <?php
                 $tempSQL = "select name from garage";
@@ -105,7 +105,7 @@ if(isset($_POST['btnaddvenue'])){
             ?>
             <div class="form-group">
               <label for="distances">Distance from <?php echo $row["name"] ?> (miles):</label>
-              <input required type="number" step="0.01" class="form-control" name="distances[]" id="distances">
+              <input style="text-align:center" required type="number" step="0.01" class="form-control" name="distances[]" id="distances">
             </div>
             <?php
                 }
@@ -114,6 +114,7 @@ if(isset($_POST['btnaddvenue'])){
           </form>
           <br>
     </div>
+    <br>
     <h3>Return to <a href="venadmin.php"> Homepage</a></h3>
   </body>
 </html>

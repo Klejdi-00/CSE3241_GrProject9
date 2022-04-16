@@ -53,13 +53,13 @@
                   ?>
                   <div class="form-group">
                      <label for="username">Username:</label>
-                     <input type="text" class="form-control" name="username" id="username" required="required" maxlength="80">
+                     <input style="text-align:center" type="text" class="form-control" name="username" id="username" required="required" maxlength="80">
                   </div>
                   <div class="form-group">
                      <label for="password">Password:</label>
-                     <input type="password" class="form-control" name="password" id="password" required="required" maxlength="80">
+                     <input style="text-align:center" type="password" class="form-control" name="password" id="password" required="required" maxlength="80">
                   </div>
-                  <button type="submit" name="btnsignup" class="btn btn-default">Submit</button>
+                  <button type="submit" name="btnsignup" class="btn btn-default">LOG IN</button>
                </form>
                <br>
       </div>
