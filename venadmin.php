@@ -22,6 +22,9 @@
          <br>   
          <h3><a href="add_event.php">Add an event</a></h3>
          <br>
+         <br>   
+         <h3><a href="add_prices1.php">Add pricing</a></h3>
+         <br>
          <br>
          <h3><a href="delete_event.php">Delete an event</a></h3>
          <br>

@@ -15,7 +15,7 @@ if(isset($_POST['btnaddevent'])){
 
      if($check_inputs){
        // Check if event already exists
-       $stmt = $connect->prepare("select * from event where event_name = ?");
+       $stmt = $connect->prepare("select * from event_list where event_name = ?");
        $stmt->bind_param("s", $event_name);
        $stmt->execute();
        $result = $stmt->get_result();
@@ -28,7 +28,7 @@ if(isset($_POST['btnaddevent'])){
 
      // Insert records
      if($check_inputs){
-       $insertEventSQL = 'insert into event(event_name, start_date, end_date, venue) 
+       $insertEventSQL = 'insert into event_list(event_name, start_date, end_date, venue) 
                             values("'.$event_name.'","'.$start_date.'","'.$end_date.'","'.$venue.'");';
        if(mysqli_query($connect, $insertEventSQL)){
             $success = "Event was added.";

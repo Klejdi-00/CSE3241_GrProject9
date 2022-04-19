@@ -2,28 +2,16 @@
 include("session.php");
 
 // Register user
-if(isset($_POST['btndeleteevent'])){
-    $success = "";
-
+if(isset($_POST['btnevent'])){
     // Getting variable from input
-    $event = trim($_POST['event']);
-
-     // Delete venue
-    $deleteSQL1 = 'delete from reservation where event_name="'.$event.'";';
-    mysqli_query($connect, $deleteSQL1);
-    $deleteSQL2 = 'delete from pricing where event_name="'.$event.'";';
-    mysqli_query($connect, $deleteSQL2);
-    $deleteSQL3 = 'delete from event_list where event_name="'.$event.'";';
-    if(mysqli_query($connect, $deleteSQL3)){
-        $success = "Event deleted.";
-    }
+    $event = $_GET['event'];
 }
 ?>
 
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Delete Event | ParkingMaster</title>
+    <title>Reservation | ParkingMaster</title>
     <!-- Bootstrap CSS Stylesheet -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   </head>
@@ -32,20 +20,8 @@ if(isset($_POST['btndeleteevent'])){
     <br>
     <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
           <form method='post' action=''>
-            <h2 style="padding-top:25px">Delete Event</h2>
+            <h2 style="padding-top:25px">Reservation</h2>
             <br>
-            <?php 
-            // Display Success message
-            if(!empty($success)){
-            ?>
-            <div class="alert alert-success">
-              <strong>Success:</strong> <?= $success ?>
-            </div>
-
-            <?php
-            }
-            ?>
-
             <div class="form-group">
                 <label for="event">Select an Event:</label>
                 <select class="form-control" style="text-align:center" name="event" required>
@@ -53,22 +29,28 @@ if(isset($_POST['btndeleteevent'])){
                     <?php
                     // Getting all the venues in an array
                     $events = array();
-                    $sql = "select event_name from event_list";
+                    $start = array();
+                    $end = array();
+                    $venues = array();
+                    $sql = "select * from event_list";
                     $qrry = $connect->query($sql);
                     while($row = $qrry->fetch_assoc()) {
                         $events[] = $row["event_name"];
+                        $start[] = $row["start_date"];
+                        $end[] = $row["end_date"];
+                        $venues[] = $row["venue"];
                     }
-                    foreach($events as $event){
-                        echo '<option>' . $event . '</option>';
+                    for($i = 0; $i < sizeof($events); $i++) {
+                        echo '<option value="'.$events[$i].'">'. $events[$i]. ' at ' .$venues[$i].' ('.$start[$i].' to '.$end[$i].')</option>';
                     }
                     ?>
                 </select>
+                <h3 style="padding:10px"><a href = "reservation2.php?event=<?php echo $event ?>">Continue</a></h3>
             </div>
-            <button type="submit" name="btndeleteevent" class="btn btn-default">Submit</button>
           </form>
           <br>
     </div>
     <br>
-    <h3>Return to <a href="venadmin.php"> Homepage</a></h3>
+    <h3>Return to <a href="customer.php"> Homepage</a></h3>
   </body>
 </html>

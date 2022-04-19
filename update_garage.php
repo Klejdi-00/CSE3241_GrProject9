@@ -12,18 +12,11 @@ if(isset($_POST['btndeletegarage'])){
     $row = $querry->fetch_assoc();
     $garage_id = $row["garage_id"];
 
-     // Delete venue
-    $deleteSQL1 = 'delete from distance where garage_id="'.$garage_id.'";';
-    mysqli_query($connect, $deleteSQL1);
-    $deleteSQL2 = 'delete from reservation where garage_id="'.$garage_id.'";';
-    mysqli_query($connect, $deleteSQL2);
-    $deleteSQL3 = 'delete from spaces where garage_id="'.$garage_id.'";';
-    mysqli_query($connect, $deleteSQL3);
-    $deleteSQL5 = 'delete from pricing where garage_id="'.$garage_id.'";';
-    mysqli_query($connect, $deleteSQL5);
-    $deleteSQL4 = 'delete from garage where garage_id="'.$garage_id.'";';
-    if(mysqli_query($connect, $deleteSQL4)){
-        $success = "Garage deleted.";
+    $max_spaces = $_POST['max_spaces'];
+
+    $updateSQL = 'update garage set max_spaces = ' . $max_spaces .' where garage_id="'.$garage_id.'";';
+    if(mysqli_query($connect, $updateSQL)){
+        $success = "Garage updated.";
     }
 }
 ?>
@@ -31,7 +24,7 @@ if(isset($_POST['btndeletegarage'])){
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Delete Garage | ParkingMaster</title>
+    <title>Update Garage | ParkingMaster</title>
     <!-- Bootstrap CSS Stylesheet -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   </head>
@@ -40,7 +33,7 @@ if(isset($_POST['btndeletegarage'])){
     <br>
     <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
           <form method='post' action=''>
-            <h2 style="padding-top:25px">Delete Garage</h2>
+            <h2 style="padding-top:25px">Update Garage</h2>
             <br>
             <?php 
             // Display Success message
@@ -71,6 +64,10 @@ if(isset($_POST['btndeletegarage'])){
                     }
                     ?>
                 </select>
+            </div>
+            <div class="form-group">
+              <label for="max_spaces">New Total Number of Spaces:</label>
+              <input style="text-align:center" required type="number" class="form-control" name="max_spaces" id="max_spaces" max=1000000 min=0>
             </div>
             <button type="submit" name="btndeletegarage" class="btn btn-default">Submit</button>
           </form>
