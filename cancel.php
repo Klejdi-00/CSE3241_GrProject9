@@ -59,7 +59,10 @@ if(isset($_POST['btndeleteres'])){
                         $id[] = $row['reservation_id'];
                     }
                     for ($i = 0; $i < sizeof($events); $i++) {
-                        echo '<option value="'.$id[$i].'"> For event: ' . $events[$i] . ' in garage number '.$garage_ids[$i].'</option>';
+                        $sql = "select name from garage where garage_id = '". $garage_ids[$i] ."'";
+                        $qrry = $connect->query($sql);
+                        $row = $qrry->fetch_assoc();
+                        echo '<option value="'.$id[$i].'"> For event: ' . $events[$i] . ' in garage '.$row['name'].'</option>';
                     }
                     ?>
                 </select>
