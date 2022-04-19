@@ -44,7 +44,7 @@ Create table if not exists Reservation (
     garage_id int not null,
     event_name varchar(80) not null,
     foreign key (garage_id) references garage(garage_id),
-    foreign key (event_name) references event_list(event_name),
+    foreign key (event_name) references event_list(event_name) on delete CASCADE,
     foreign key (customer_user) references users(username))engine=innodb;
 
 create table if not exists spaces(
