@@ -3,7 +3,7 @@ Create table if not exists venue (
 
 create table if not exists garage(
 	garage_id int not null auto_increment primary key,
-    garage_name varchar(80) not null,
+    name varchar(80) not null,
     address varchar(255) not null,
     max_spaces int not null) engine=innodb;
 
@@ -26,40 +26,39 @@ Create table if not exists pricing (
 	garage_id int not null,
     price double not null,
 	primary key (event_name, garage_id),
-    foreign key (event_name) references event_list(event_name),
-    foreign key (garage_id) references garage(garage_id)) engine=innodb;
+    foreign key (event_name) references event_list(event_name) on delete CASCADE,
+    foreign key (garage_id) references garage(garage_id) on delete CASCADE) engine=innodb;
 
 create table if not exists users(
 	username varchar(80) not null primary key,
     fname varchar(80) not null,
     lname varchar(80) not null,
-    pass varchar(80) not null,
-    phone_no varchar(10) not null) engine=innodb;
+    password varchar(80) not null,
+    phone_nr varchar(10) not null) engine=innodb;
 
 Create table if not exists Reservation (
 	reservation_id int not null primary key auto_increment,
-	r_date date not null,
+	date date not null,
 	fee int not null,
 	customer_user varchar(80) not null,
     garage_id int not null,
     event_name varchar(80) not null,
-	primary key (Pnumber),
     foreign key (garage_id) references garage(garage_id),
     foreign key (event_name) references event_list(event_name),
     foreign key (customer_user) references users(username))engine=innodb;
 
 create table if not exists spaces(
 	garage_id int not null,
-    s_date date not null,
+    date date not null,
     spaces_taken int not null,
-    primary key (garage_id, s_date),
+    primary key (garage_id, date),
     foreign key (garage_id) references garage(garage_id)) engine=innodb;
 
 insert into venue (venue_name) values ('Shottenstein Center');
 insert into venue (venue_name) values ('Stadium');
 insert into venue (venue_name) values ('Ice Rink');
 
-insert into garage (garage_name, address, max_spaces) values ('Tuttle', '222 W Zany Ave', 20);
+insert into garage (name, address, max_spaces) values ('Tuttle', '222 W Zany Ave', 20);
 -- insert into garage (garage_name, address, max_spaces) values ('North', '364 E Bat Street', 20);
 -- insert into garage (garage_name, address, max_spaces) values ('South', '464 Birdman Boulavard', 20);
 
@@ -72,7 +71,11 @@ values ('Public skate with Tyler', '2022-4-28', '2022-4-30', 'Ice Rink');
 
 insert into pricing (event_name, garage_id, price) values ('Public skate with Tyler', 1, 22.50);
 
-insert into users (username, fname, lname, pass, phone_no)
+insert into users (username, fname, lname, password, phone_nr)
 values ('Sahil@osu.edu', 'Sahil', 'Tay', 'pass', '6146140987');
 
+insert into users (username, fname, lname, password, phone_nr)
+values ('VENADMIN', 'Ross', 'Taya', 'venadmin', '6146140989');
 
+insert into users (username, fname, lname, password, phone_nr)
+values ('PARADMIN', 'K', 'Tayd', 'paradmin', '6146140980');

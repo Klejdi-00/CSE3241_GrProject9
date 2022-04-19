@@ -11,7 +11,7 @@ if(isset($_POST['btndeletevenue'])){
      // Delete venue
     $deleteSQL1 = 'delete from distance where venue="'.$venue.'";';
     mysqli_query($connect, $deleteSQL1);
-    $deleteSQL2 = 'delete from event where venue="'.$venue.'";';
+    $deleteSQL2 = 'delete from event_list where venue="'.$venue.'";';
     mysqli_query($connect, $deleteSQL2);
     $deleteSQL3 = 'delete from venue where venue_name="'.$venue.'";';
     if(mysqli_query($connect, $deleteSQL3)){
