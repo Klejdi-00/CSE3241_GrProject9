@@ -5,6 +5,7 @@ if(isset($_POST['btnevent'])){
     $success = "";
     // Getting variable from input
     $prices = $_POST['prices'];
+    $event = $_POST['event'];
     // Getting all the garage_id-s in an array
     $garages = array();
     $tempSQL = "select garage_id from garage";
@@ -21,14 +22,15 @@ if(isset($_POST['btnevent'])){
             while($row = $tempqrry->fetch_assoc()){
                 $events[] = $row['event_name'];
             }
-            if (!in_array( $_GET['event'], $events)){
+            if (!in_array( $event, $events)){
                 $insertPricesSQL = "insert into pricing(event_name,garage_id,price) 
-                                        values('" . $_GET['event'] . "',". $garages[$i] . ",".$prices[$i].")";
+                                        values('" . $event . "',". $garages[$i] . ",".$prices[$i].")";
                 if(mysqli_query($connect, $insertPricesSQL)){
                     $success .= "Price was added. ";
                 }
             } else {
-                $insertPricesSQL = "update pricing set price = ".$prices[$i]." where event_name =\"". $_GET['event']."\" and garage_id = " . $garages[$i];
+                $insertPricesSQL = "update pricing set price = ".$prices[$i]." where event_name =\"". $event."\" and garage_id = " . $garages[$i];
+                mysqli_query($connect, $insertPricesSQL);
                 $success .= "Price was updated. ";
             }
         }
@@ -61,8 +63,14 @@ if(isset($_POST['btnevent'])){
             }
             ?>
             <div class="form-group">
+                <label for="event">Selected Event:</label>
+                <select class="form-control" style="text-align:center" name="event">
+                    <option><?php echo $_POST['event'] ?></option>
+                </select>
+            </div>
+            <div class="form-group">
             <?php
-                $event = $_GET['event'];
+                $event = $_POST['event'];
                 // Getting variable from input
                 $sql1 = "select venue from event_list where event_name = '".$event."';";
                 $querry = mysqli_query($connect, $sql1);

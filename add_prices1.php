@@ -19,7 +19,7 @@ if(isset($_POST['btnevent'])){
     <h1>ParkingMaster</h1>
     <br>
     <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
-          <form method='post' action=''>
+          <form method='post' action='add_prices2.php'>
             <h2 style="padding-top:25px">Add Prices</h2>
             <br>
             <div class="form-group">
@@ -38,8 +38,8 @@ if(isset($_POST['btnevent'])){
                         echo '<option>' . $event . '</option>';
                     }
                     ?>
-                </select>
-                <h3 style="padding:10px"><a href = "add_prices2.php?event=<?php echo $event ?>">Continue</a></h3>
+                </select><br>
+                <button type="submit" class="btn btn-default">Submit</button>
             </div>
           </form>
           <br>
