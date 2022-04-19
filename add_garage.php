@@ -12,6 +12,17 @@ if(isset($_POST['btnaddgarage'])){
     $address = trim($_POST['address']);
     $max_spaces = $_POST['max_spaces'];
 
+    // Getting the distances from input
+    $distances = $_POST['distances'];
+
+    // Getting all the garage_id-s in an array
+    $venues = array();
+    $tempSQL = "select venue_name from venue";
+   $qrry = $connect->query($tempSQL);
+   while($row = $qrry->fetch_assoc()) {
+       $venues[] = $row["venue_name"];
+   }
+
     if($check_inputs){
         // Check if name already exists
         $stmt = $connect->prepare("select * from garage where name = ?");
@@ -38,13 +49,25 @@ if(isset($_POST['btnaddgarage'])){
        }
      }
 
+     $getMaxSQL = 'select max(garage_id) from garage';
+     $q = mysqli_query($connect, $getMaxSQL);
+     $row = $q->fetch_assoc();
+     $garage_id = $row['max(garage_id)'] + 1;
      // Insert records
      if($check_inputs){
-       $insertEventSQL = 'insert into garage(name, address, max_spaces) 
+       $insertGarageSQL = 'insert into garage(name, address, max_spaces) 
                             values("'.$garage_name.'","'.$address.'",'.$max_spaces.');';
-       if(mysqli_query($connect, $insertEventSQL)){
-            $success = "Garage was added.";
+       if(mysqli_query($connect, $insertGarageSQL)){
+            $success = "Garage was added. ";
         }
+    }
+    // Inserting distances
+    for ($i = 0; $i < sizeof($distances); $i++){
+      $insertDistancesSQL = "insert into distance(garage_id,venue,distance) 
+                              values(" . $garage_id . ',"' . $venues[$i] . '",' . $distances[$i] . ');';
+      if(mysqli_query($connect, $insertDistancesSQL)){
+          $success .= "Distances were added. ";
+      }
     }
 }
 ?>
@@ -99,6 +122,18 @@ if(isset($_POST['btnaddgarage'])){
               <label for="max_spaces">Total Number of Spaces:</label>
               <input style="text-align:center" required type="number" class="form-control" name="max_spaces" id="max_spaces" max=1000000 min=0>
             </div>
+            <?php
+                $tempSQL = "select venue_name from venue";
+                $qrry = $connect->query($tempSQL);
+                while($row = $qrry->fetch_assoc()) {   
+            ?>
+            <div class="form-group">
+              <label for="distances">Distance from <?php echo $row["venue_name"] ?> (miles):</label>
+              <input style="text-align:center" required type="number" step="0.01" class="form-control" name="distances[]" id="distances">
+            </div>
+            <?php
+                }
+            ?>
             <button type="submit" name="btnaddgarage" class="btn btn-default">Submit</button>
           </form>
           <br>
