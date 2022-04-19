@@ -7,17 +7,26 @@ if(isset($_POST['btndeleteres'])){
 
     // Getting variable from input
     $reservation = trim($_POST['reservation']);
+    $curr_date = date('Y-m-d');
+    $date1 = new DateTime($curr_date);
+
     $tempsql1 = "select date, garage_id from reservation where reservation_id = ". $reservation;
     $q = mysqli_query($connect, $tempsql1);
     $row = $q->fetch_assoc();
     $garage_id = $row['garage_id'];
     $date = $row['date'];
-    $tempsql2 = "update spaces set spaces_taken = spaces_taken - 1 where garage_id = ".$garage_id." and date = '".$date."'";
-    mysqli_query($connect, $tempsql2);
-     // Delete venue
-    $deleteSQL = 'delete from reservation where reservation_id='.$reservation.';';
-    if(mysqli_query($connect, $deleteSQL)){
-        $success = "Reservation cancelled.";
+    $date2 = new DateTime($date);
+    $diff = abs(strtotime($date) - strtotime($curr_date));
+    if ($diff < 3){
+      $tempsql2 = "update spaces set spaces_taken = spaces_taken - 1 where garage_id = ".$garage_id." and date = '".$date."'";
+      mysqli_query($connect, $tempsql2);
+      // Delete venue
+      $deleteSQL = 'delete from reservation where reservation_id='.$reservation.';';
+      if(mysqli_query($connect, $deleteSQL)){
+          $success = "Reservation cancelled.";
+      }
+    } else {
+      $error = "Reservation can not be cancelled less than 3 days prior to event.";
     }
 }
 ?>
@@ -36,6 +45,17 @@ if(isset($_POST['btndeleteres'])){
           <form method='post' action=''>
             <h2 style="padding-top:25px">Cancel Reservation</h2>
             <br>
+            <?php 
+            // Display Error message
+            if(!empty($error)){
+            ?>
+            <div class="alert alert-danger">
+              <strong>Error:</strong> <?= $error ?>
+            </div>
+
+            <?php
+            }
+            ?>
             <?php 
             // Display Success message
             if(!empty($success)){
@@ -57,6 +77,7 @@ if(isset($_POST['btndeleteres'])){
                     $events = array();
                     $garage_ids = array();
                     $id = array();
+                    $date = array();
                     $sql = "select * from reservation where customer_user = '". $user_session ."'";
                     $qrry = $connect->query($sql);
                     while($row = $qrry->fetch_assoc()) {
