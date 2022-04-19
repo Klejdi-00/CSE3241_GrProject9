@@ -4,18 +4,35 @@ include("session.php");
 // Register user
 if(isset($_POST['btndeletevenue'])){
     $success = "";
+    $error = "";
+    $check_inputs = true;
 
     // Getting variable from input
     $venue = trim($_POST['venue']);
 
+    if($check_inputs){
+      // Check if there's events in venue
+      $stmt = $connect->prepare("SELECT * FROM event_list WHERE venue = ?");
+      $stmt->bind_param("s", $venue);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      if($result->num_rows > 0){
+        $check_inputs = false;
+        $error = "There is at least one event in this venue. Events need to be deleted first.";
+      }
+    }
+
      // Delete venue
-    $deleteSQL1 = 'delete from distance where venue="'.$venue.'";';
-    mysqli_query($connect, $deleteSQL1);
-    $deleteSQL2 = 'delete from event_list where venue="'.$venue.'";';
-    mysqli_query($connect, $deleteSQL2);
-    $deleteSQL3 = 'delete from venue where venue_name="'.$venue.'";';
-    if(mysqli_query($connect, $deleteSQL3)){
-        $success = "Venue deleted.";
+     if ($check_inputs){
+      $deleteSQL1 = 'delete from distance where venue="'.$venue.'";';
+      mysqli_query($connect, $deleteSQL1);
+      $deleteSQL2 = 'delete from event_list where venue="'.$venue.'";';
+      mysqli_query($connect, $deleteSQL2);
+      $deleteSQL3 = 'delete from venue where venue_name="'.$venue.'";';
+      if(mysqli_query($connect, $deleteSQL3)){
+          $success = "Venue deleted.";
+      }
     }
 }
 ?>
@@ -34,6 +51,17 @@ if(isset($_POST['btndeletevenue'])){
           <form method='post' action=''>
             <h2 style="padding-top:25px">Delete Venue</h2>
             <br>
+            <?php 
+            // Display Error message
+            if(!empty($error)){
+            ?>
+            <div class="alert alert-danger">
+              <strong>Error:</strong> <?= $error ?>
+            </div>
+
+            <?php
+            }
+            ?>
             <?php 
             // Display Success message
             if(!empty($success)){
