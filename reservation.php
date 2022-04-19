@@ -2,7 +2,7 @@
 include("session.php");
 
 // Register user
-if(isset($_POST['btnevent'])){
+if(isset($_POST['btnres'])){
     // Getting variable from input
     $event = trim($_POST['event']);
 }
