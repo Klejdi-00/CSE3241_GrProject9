@@ -8,7 +8,7 @@ if(isset($_POST['btnres'])){
     $check_inputs = true;
 
     // Getting variable from input
-    $event = $_GET['event'];
+    $event = $_POST['event'];
     $garage_id = $_POST['garage_id'];
     $date = $_POST['date'];
 
@@ -18,15 +18,15 @@ if(isset($_POST['btnres'])){
     $sql2 = "select max_spaces from garage where garage_id = ".$garage_id;
     $qrry2 = $connect->query($sql2);
     $row2 = $qrry2->fetch_assoc();
-    if($row['spaces_taken'] == $row2['max_spaces']){
-      $check_inputs = false;
-      $error = "There are no spaces available in the selected garage and date.";
-    } elseif (sizeof($row) < 1) {
+    if($row == NULL){
       $tempsql = "insert into spaces(garage_id, date, spaces_taken) values (".$garage_id.", '".$date."', 1)";
-      mysqli_query($connect, $tempsql)
-    } else {
+      mysqli_query($connect, $tempsql);
+    } elseif ($row['spaces_taken'] == $row2['max_spaces']) {
+     $check_inputs = false;
+     $error = "There are no spaces available in the selected garage and date.";
+    }else {
       $tempsql = "update spaces set spaces_taken = spaces_taken + 1 where garage_id = ".$garage_id." and date = '".$date."'";
-      mysqli_query($connect, $tempsql)
+      mysqli_query($connect, $tempsql);
     }
 
     if ($check_inputs){
@@ -34,8 +34,7 @@ if(isset($_POST['btnres'])){
       $qrry3 = $connect->query($sql3);
       $row3 = $qrry3->fetch_assoc();
       $price = $row3['price'];
-      $sql4 = "insert into reservation(date, fee, customer_user, event_name, garage_id) values
-                ('".$date."', ".$price.", '"$user_session"', '".$event."', ".$garage_id.")";
+      $sql4 = "insert into reservation(date, fee, customer_user, event_name, garage_id) values ('".$date."', ".$price.", '".$user_session."', '".$event."', ".$garage_id.")";
       if(mysqli_query($connect, $sql4)){
         $success = "Reservation was successful.";
       }
@@ -81,8 +80,15 @@ if(isset($_POST['btnres'])){
             <h2 style="padding-top:25px">Reservation</h2>
             <br>
             <div class="form-group">
+                <label for="event">Selected Event:</label>
+                <select class="form-control" style="text-align:center" name="event">
+                    <option><?php echo $_POST['event'] ?></option>
+                </select>
+            </div>
+            <div class="form-group">
               <?php 
-                  $sql = "select start_date, end date from event_list where event_name = '".$_GET['event']."'";
+                  $event = $_POST['event'];
+                  $sql = "select start_date, end_date from event_list where event_name = '".$event."'";
                   $qrry = $connect->query($sql);
                   $row = $qrry->fetch_assoc();
                   $start = $row['start_date'];
@@ -100,14 +106,14 @@ if(isset($_POST['btnres'])){
                     $ids = array();
                     $distances = array();
                     $prices = array();
-                    $sql = "select garage_id, price from pricing where event_name = '".$_GET['event']."'";
+                    $sql = "select garage_id, price from pricing where event_name = '".$event."'";
                     $qrry = $connect->query($sql);
                     while($row = $qrry->fetch_assoc()) {
                         $ids[]= $row["garage_id"];
                         $prices[] = $row['price'];
                     }
                     
-                    $sql2 = "select venue from event_list where event_name = '".$_GET['event']."'";
+                    $sql2 = "select venue from event_list where event_name = '".$event."'";
                     $qrry2 = $connect->query($sql2);
                     $row2 = $qrry2->fetch_assoc();
                     $venue= $row2["venue"];
@@ -122,11 +128,10 @@ if(isset($_POST['btnres'])){
                         $sql4 = "select name from garage where garage_id = ".$ids[$i];
                         $qrry4 = $connect->query($sql4);
                         $row4 = $qrry4->fetch_assoc();
-                        echo '<option value="'.$ids[$i].'">'. $row4['name']. ' Distance: ' .$distances[$i].' miles Price: $'.$prices[$i].'</option>';
+                        echo '<option value="'.$ids[$i].'">Name: '. $row4['name']. '  Distance: ' .$distances[$i].' miles  Price: $'.$prices[$i].'</option>';
                     }
                     ?>
                 </select>
-                <h3 style="padding:10px"><a href = "reservation2.php?event=<?php echo $event ?>">Continue</a></h3>
             </div>
             <button type="submit" name="btnres" class="btn btn-default">Submit</button>
           </form>
