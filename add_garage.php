@@ -15,7 +15,7 @@ if(isset($_POST['btnaddgarage'])){
     // Getting the distances from input
     $distances = $_POST['distances'];
 
-    // Getting all the garage_id-s in an array
+    // Getting all the venues in an array
     $venues = array();
     $tempSQL = "select venue_name from venue";
    $qrry = $connect->query($tempSQL);
