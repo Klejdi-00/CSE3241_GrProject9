@@ -19,6 +19,8 @@ if(isset($_POST['btndeletegarage'])){
     mysqli_query($connect, $deleteSQL2);
     $deleteSQL3 = 'delete from spaces where garage_id="'.$garage_id.'";';
     mysqli_query($connect, $deleteSQL3);
+    $deleteSQL5 = 'delete from pricing where garage_id="'.$garage_id.'";';
+    mysqli_query($connect, $deleteSQL5);
     $deleteSQL4 = 'delete from garage where garage_id="'.$garage_id.'";';
     if(mysqli_query($connect, $deleteSQL4)){
         $success = "Garage deleted.";

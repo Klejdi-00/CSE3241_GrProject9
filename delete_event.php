@@ -11,8 +11,10 @@ if(isset($_POST['btndeleteevent'])){
      // Delete venue
     $deleteSQL1 = 'delete from reservation where event_name="'.$event.'";';
     mysqli_query($connect, $deleteSQL1);
-    $deleteSQL2 = 'delete from event where event_name="'.$event.'";';
-    if(mysqli_query($connect, $deleteSQL2)){
+    $deleteSQL2 = 'delete from pricing where event_name="'.$event.'";';
+    mysqli_query($connect, $deleteSQL2);
+    $deleteSQL3 = 'delete from event_list where event_name="'.$event.'";';
+    if(mysqli_query($connect, $deleteSQL3)){
         $success = "Event deleted.";
     }
 }
@@ -51,7 +53,7 @@ if(isset($_POST['btndeleteevent'])){
                     <?php
                     // Getting all the venues in an array
                     $events = array();
-                    $sql = "select event_name from event";
+                    $sql = "select event_name from event_list";
                     $qrry = $connect->query($sql);
                     while($row = $qrry->fetch_assoc()) {
                         $events[] = $row["event_name"];
