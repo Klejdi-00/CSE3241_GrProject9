@@ -39,7 +39,7 @@ create table if not exists users(
 Create table if not exists Reservation (
 	reservation_id int not null primary key auto_increment,
 	date date not null,
-	fee int not null,
+	fee double not null,
 	customer_user varchar(80) not null,
     garage_id int not null,
     event_name varchar(80) not null,
