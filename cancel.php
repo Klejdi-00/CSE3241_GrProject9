@@ -7,7 +7,13 @@ if(isset($_POST['btndeleteres'])){
 
     // Getting variable from input
     $reservation = trim($_POST['reservation']);
-
+    $tempsql1 = "select date, garage_id from reservation where reservation_id = ". $reservation;
+    $q = mysqli_query($connect, $tempsql1);
+    $row = $q->fetch_assoc();
+    $garage_id = $row['garage_id'];
+    $date = $row['date'];
+    $tempsql2 = "update spaces set spaces_taken = spaces_taken - 1 where garage_id = ".$garage_id." and date = '".$date."'";
+    mysqli_query($connect, $tempsql2);
      // Delete venue
     $deleteSQL = 'delete from reservation where reservation_id='.$reservation.';';
     if(mysqli_query($connect, $deleteSQL)){
