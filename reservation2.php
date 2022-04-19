@@ -52,7 +52,11 @@ if(isset($_POST['btnres'])){
   <body style = "background-color:lightblue; text-align:center">
     <h1>ParkingMaster</h1>
     <br>
-    <?php 
+    <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
+          <form method='post' action=''>
+            <h2 style="padding-top:25px">Reservation</h2>
+            <br>
+            <?php 
             // Display Error message
             if(!empty($error)){
             ?>
@@ -75,10 +79,6 @@ if(isset($_POST['btnres'])){
             <?php
             }
       ?>
-    <div class='col-md-4' style="float:none; margin:auto; background-color:aliceblue; border-radius:25px">
-          <form method='post' action=''>
-            <h2 style="padding-top:25px">Reservation</h2>
-            <br>
             <div class="form-group">
                 <label for="event">Selected Event:</label>
                 <select class="form-control" style="text-align:center" name="event">
