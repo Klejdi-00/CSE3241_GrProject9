@@ -18,9 +18,15 @@ if(isset($_POST['btnres'])){
     $sql2 = "select max_spaces from garage where garage_id = ".$garage_id;
     $qrry2 = $connect->query($sql2);
     $row2 = $qrry2->fetch_assoc();
-    if(sizeof($row) < 1 || $row['spaces_taken'] == $row2['max_spaces']){
+    if($row['spaces_taken'] == $row2['max_spaces']){
       $check_inputs = false;
       $error = "There are no spaces available in the selected garage and date.";
+    } elseif (sizeof($row) < 1) {
+      $tempsql = "insert into spaces(garage_id, date, spaces_taken) values (".$garage_id.", '".$date."', 1)";
+      mysqli_query($connect, $tempsql)
+    } else {
+      $tempsql = "update spaces set spaces_taken = spaces_taken + 1 where garage_id = ".$garage_id." and date = '".$date."'";
+      mysqli_query($connect, $tempsql)
     }
 
     if ($check_inputs){
