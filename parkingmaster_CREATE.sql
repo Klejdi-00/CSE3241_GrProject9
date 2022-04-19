@@ -23,7 +23,7 @@ Create table if not exists event_list (
 
 Create table if not exists pricing (
 	event_name varchar(80) not null,
-	garage_id varchar(15) not null,
+	garage_id int not null,
     price double not null,
 	primary key (event_name, garage_id),
     foreign key (event_name) references event_list(event_name),
