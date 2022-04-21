@@ -17,7 +17,7 @@ if(isset($_POST['btndeleteres'])){
     $date = $row['date'];
     $date2 = new DateTime($date);
     $diff = abs(strtotime($date) - strtotime($curr_date));
-    if ($diff < 3){
+    if ($diff > 3){
       $tempsql2 = "update spaces set spaces_taken = spaces_taken - 1 where garage_id = ".$garage_id." and date = '".$date."'";
       mysqli_query($connect, $tempsql2);
       // Delete venue
