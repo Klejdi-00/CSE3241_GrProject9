@@ -4,19 +4,33 @@ include("session.php");
 // Register user
 if(isset($_POST['btndeletegarage'])){
     $success = "";
-
+    $error = "";
     // Getting variable from input
     $garage = trim($_POST['garage']);
+    $max_spaces = $_POST['max_spaces'];
     $sql = "select garage_id from garage where name = '".$garage."';";
     $querry = mysqli_query($connect, $sql);
     $row = $querry->fetch_assoc();
     $garage_id = $row["garage_id"];
 
-    $max_spaces = $_POST['max_spaces'];
-
-    $updateSQL = 'update garage set max_spaces = ' . $max_spaces .' where garage_id="'.$garage_id.'";';
-    if(mysqli_query($connect, $updateSQL)){
-        $success = "Garage updated.";
+    $stmt = $connect->prepare("SELECT max(spaces_taken) FROM spaces WHERE garage_id = ?");
+     $stmt->bind_param("i", $garage_id);
+     $stmt->execute();
+     $result = $stmt->get_result();
+     $stmt->close();
+    if($result->num_rows > 0){
+      $row = $result->fetch_assoc();
+      $spaces_taken = $row["max(spaces_taken)"];
+    } else {
+      $spaces_taken = 0;
+    }
+    if ($max_spaces >= $spaces_taken) {
+      $updateSQL = 'update garage set max_spaces = ' . $max_spaces .' where garage_id="'.$garage_id.'";';
+      if(mysqli_query($connect, $updateSQL)){
+          $success = "Garage updated.";
+      }
+    } else {
+      $error = "The number of reserved spaces is higher than the new number of spaces.";
     }
 }
 ?>
@@ -35,6 +49,17 @@ if(isset($_POST['btndeletegarage'])){
           <form method='post' action=''>
             <h2 style="padding-top:25px">Update Garage</h2>
             <br>
+            <?php 
+            // Display Error message
+            if(!empty($error)){
+            ?>
+            <div class="alert alert-danger">
+              <strong>Error:</strong> <?= $error ?>
+            </div>
+
+            <?php
+            }
+            ?>
             <?php 
             // Display Success message
             if(!empty($success)){
